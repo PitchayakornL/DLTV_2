@@ -1,0 +1,631 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>กรอบการวิจัย CIPPIEST Model</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600;700&display=swap');
+        
+        body {
+            font-family: 'Sarabun', sans-serif;
+        }
+        
+        .component-card {
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .component-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+        }
+        
+        .component-card.active {
+            transform: scale(1.02);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+        }
+        
+        .arrow {
+            transition: all 0.3s ease;
+        }
+        
+        .arrow.highlight {
+            stroke: #f59e0b;
+            stroke-width: 3;
+            filter: drop-shadow(0 0 8px rgba(245, 158, 11, 0.6));
+        }
+        
+        .detail-panel {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+        }
+        
+        .detail-panel.open {
+            max-height: 500px;
+        }
+        
+        .progress-bar {
+            transition: width 0.5s ease;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+        
+        .pulse-animation {
+            animation: pulse 2s infinite;
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-slate-50 to-blue-50 min-h-screen">
+    <div class="container mx-auto px-4 py-8">
+        <!-- Header -->
+        <div class="text-center mb-8">
+            <h1 class="text-4xl font-bold text-slate-800 mb-2">กรอบการวิจัย CIPPIEST Model</h1>
+            <p class="text-lg text-slate-600">การพัฒนาเทคโนโลยีดิจิทัลเพื่อการบริหารจัดการและการจัดการศึกษา</p>
+            <div class="mt-4 flex justify-center space-x-4">
+                <button onclick="showOverview()" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg transition-colors">
+                    ภาพรวม
+                </button>
+                <button onclick="startAnimation()" class="bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded-lg transition-colors">
+                    แสดงขั้นตอน
+                </button>
+                <button onclick="resetView()" class="bg-gray-600 hover:bg-gray-700 text-white px-6 py-2 rounded-lg transition-colors">
+                    รีเซ็ต
+                </button>
+            </div>
+        </div>
+
+        <!-- Main Framework -->
+        <div class="relative">
+            <!-- SVG for arrows -->
+            <svg class="absolute inset-0 w-full h-full pointer-events-none" style="z-index: 1;">
+                <!-- Context to Input -->
+                <path id="arrow1" class="arrow" d="M 350 200 Q 375 200 400 200" stroke="#64748b" stroke-width="2" fill="none" marker-end="url(#arrowhead)"/>
+                <!-- Input to Process -->
+                <path id="arrow2" class="arrow" d="M 700 200 Q 725 200 750 200" stroke="#64748b" stroke-width="2" fill="none" marker-end="url(#arrowhead)"/>
+                <!-- Process to Product -->
+                <path id="arrow3" class="arrow" d="M 1050 200 Q 1075 200 1100 200" stroke="#64748b" stroke-width="2" fill="none" marker-end="url(#arrowhead)"/>
+                <!-- Product to Impact -->
+                <path id="arrow4" class="arrow" d="M 1225 240 Q 1225 300 200 350" stroke="#64748b" stroke-width="2" fill="none" marker-end="url(#arrowhead)"/>
+                <!-- Impact to Effectiveness -->
+                <path id="arrow5" class="arrow" d="M 350 410 Q 375 410 400 410" stroke="#64748b" stroke-width="2" fill="none" marker-end="url(#arrowhead)"/>
+                <!-- Effectiveness to Efficiency -->
+                <path id="arrow6" class="arrow" d="M 700 410 Q 725 410 750 410" stroke="#64748b" stroke-width="2" fill="none" marker-end="url(#arrowhead)"/>
+                <!-- Efficiency to Sustainability -->
+                <path id="arrow7" class="arrow" d="M 1050 410 Q 1075 410 1100 410" stroke="#64748b" stroke-width="2" fill="none" marker-end="url(#arrowhead)"/>
+                
+                <defs>
+                    <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+                        <polygon points="0 0, 10 3.5, 0 7" fill="#64748b"/>
+                    </marker>
+                </defs>
+            </svg>
+
+            <!-- Component Cards -->
+            <div class="grid grid-cols-1 lg:grid-cols-4 gap-6 mb-8 relative" style="z-index: 2;">
+                <!-- Context -->
+                <div id="context" class="component-card bg-white rounded-xl p-6 border-l-4 border-blue-500 shadow-lg" onclick="toggleCriteria('context')">
+                    <div class="flex items-center mb-4 cursor-pointer">
+                        <div class="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center mr-3">
+                            <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                            </svg>
+                        </div>
+                        <h3 class="text-xl font-bold text-blue-700">Context (บริบท)</h3>
+                        <svg class="w-5 h-5 ml-auto transform transition-transform" id="contextArrow">
+                            <path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" fill="none"/>
+                        </svg>
+                    </div>
+                    <div class="space-y-2 text-sm text-slate-700">
+                        <div class="flex items-center">
+                            <span class="w-2 h-2 bg-blue-300 rounded-full mr-2"></span>
+                            <span>ความสอดคล้องกับแผนการศึกษาแห่งชาติ</span>
+                        </div>
+                        <div class="flex items-center">
+                            <span class="w-2 h-2 bg-blue-300 rounded-full mr-2"></span>
+                            <span>ความจำเป็นของโครงการ</span>
+                        </div>
+                    </div>
+                    <div id="contextCriteria" class="criteria-panel mt-4 p-3 bg-blue-50 rounded-lg" style="display: none;">
+                        <p class="text-xs font-semibold text-blue-800">เกณฑ์ประเมิน:</p>
+                        <p class="text-xs text-blue-700">≥ 80% สอดคล้องกับยุทธศาสตร์</p>
+                        <p class="text-xs text-blue-700">ครู/ผู้บริหาร ≥ 70% สะท้อนความจำเป็น</p>
+                    </div>
+                </div>
+
+                <!-- Input -->
+                <div id="input" class="component-card bg-white rounded-xl p-6 border-l-4 border-green-500 shadow-lg" onclick="toggleCriteria('input')">
+                    <div class="flex items-center mb-4 cursor-pointer">
+                        <div class="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center mr-3">
+                            <svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4m0 5c0 2.21-3.582 4-8 4s-8-1.79-8-4"/>
+                            </svg>
+                        </div>
+                        <h3 class="text-xl font-bold text-green-700">Input (ปัจจัยนำเข้า)</h3>
+                        <svg class="w-5 h-5 ml-auto transform transition-transform" id="inputArrow">
+                            <path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" fill="none"/>
+                        </svg>
+                    </div>
+                    <div class="space-y-2 text-sm text-slate-700">
+                        <div class="flex items-center">
+                            <span class="w-2 h-2 bg-green-300 rounded-full mr-2"></span>
+                            <span>งบประมาณ</span>
+                        </div>
+                        <div class="flex items-center">
+                            <span class="w-2 h-2 bg-green-300 rounded-full mr-2"></span>
+                            <span>บุคลากร ICT</span>
+                        </div>
+                        <div class="flex items-center">
+                            <span class="w-2 h-2 bg-green-300 rounded-full mr-2"></span>
+                            <span>โครงสร้างพื้นฐานเทคโนโลยี</span>
+                        </div>
+                        <div class="flex items-center">
+                            <span class="w-2 h-2 bg-green-300 rounded-full mr-2"></span>
+                            <span>Cyber Security, Big Data, DLTV</span>
+                        </div>
+                    </div>
+                    <div id="inputCriteria" class="criteria-panel mt-4 p-3 bg-green-50 rounded-lg" style="display: none;">
+                        <p class="text-xs font-semibold text-green-800">เกณฑ์ประเมิน:</p>
+                        <p class="text-xs text-green-700">≥ 90% งบประมาณใช้งานจริง</p>
+                        <p class="text-xs text-green-700">≥ 70% บุคลากร ICT ผ่านเกณฑ์</p>
+                        <p class="text-xs text-green-700">ระบบเชื่อมโยงข้อมูลสารสนเทศครบถ้วน</p>
+                    </div>
+                </div>
+
+                <!-- Process -->
+                <div id="process" class="component-card bg-white rounded-xl p-6 border-l-4 border-amber-500 shadow-lg" onclick="toggleCriteria('process')">
+                    <div class="flex items-center mb-4 cursor-pointer">
+                        <div class="w-10 h-10 bg-amber-100 rounded-lg flex items-center justify-center mr-3">
+                            <svg class="w-6 h-6 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/>
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                            </svg>
+                        </div>
+                        <h3 class="text-xl font-bold text-amber-700">Process (กระบวนการ)</h3>
+                        <svg class="w-5 h-5 ml-auto transform transition-transform" id="processArrow">
+                            <path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" fill="none"/>
+                        </svg>
+                    </div>
+                    <div class="space-y-2 text-sm text-slate-700">
+                        <div class="flex items-center">
+                            <span class="w-2 h-2 bg-amber-300 rounded-full mr-2"></span>
+                            <span>กิจกรรม Cyber Security, Big Data, DLTV</span>
+                        </div>
+                        <div class="flex items-center">
+                            <span class="w-2 h-2 bg-amber-300 rounded-full mr-2"></span>
+                            <span>การมีส่วนร่วมของผู้เข้าร่วม</span>
+                        </div>
+                        <div class="flex items-center">
+                            <span class="w-2 h-2 bg-amber-300 rounded-full mr-2"></span>
+                            <span>การดำเนินงานตามแผน/เวลา</span>
+                        </div>
+                    </div>
+                    <div id="processCriteria" class="criteria-panel mt-4 p-3 bg-amber-50 rounded-lg" style="display: none;">
+                        <p class="text-xs font-semibold text-amber-800">เกณฑ์ประเมิน:</p>
+                        <p class="text-xs text-amber-700">≥ 80% ของกิจกรรมตรงตามแผน</p>
+                        <p class="text-xs text-amber-700">ผู้เข้าร่วม ≥ 80% มีส่วนร่วม</p>
+                        <p class="text-xs text-amber-700">การดำเนินงานตรงตามกำหนดเวลา</p>
+                    </div>
+                </div>
+
+                <!-- Product -->
+                <div id="product" class="component-card bg-white rounded-xl p-6 border-l-4 border-pink-500 shadow-lg" onclick="toggleCriteria('product')">
+                    <div class="flex items-center mb-4 cursor-pointer">
+                        <div class="w-10 h-10 bg-pink-100 rounded-lg flex items-center justify-center mr-3">
+                            <svg class="w-6 h-6 text-pink-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/>
+                            </svg>
+                        </div>
+                        <h3 class="text-xl font-bold text-pink-700">Product (ผลผลิต)</h3>
+                        <svg class="w-5 h-5 ml-auto transform transition-transform" id="productArrow">
+                            <path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" fill="none"/>
+                        </svg>
+                    </div>
+                    <div class="space-y-2 text-sm text-slate-700">
+                        <div class="flex items-center">
+                            <span class="w-2 h-2 bg-pink-300 rounded-full mr-2"></span>
+                            <span>ผลสัมฤทธิ์ทางการทดสอบ (RT, NT, O-NET)</span>
+                        </div>
+                        <div class="flex items-center">
+                            <span class="w-2 h-2 bg-pink-300 rounded-full mr-2"></span>
+                            <span>การใช้ระบบการศึกษาทางไกลผ่านดาวเทียม</span>
+                        </div>
+                    </div>
+                    <div id="productCriteria" class="criteria-panel mt-4 p-3 bg-pink-50 rounded-lg" style="display: none;">
+                        <p class="text-xs font-semibold text-pink-800">เกณฑ์ประเมิน:</p>
+                        <p class="text-xs text-pink-700">≥ 70% นำไปใช้จริง</p>
+                        <p class="text-xs text-pink-700">คะแนนทดสอบเพิ่มขึ้น ≥ 5%</p>
+                        <p class="text-xs text-pink-700">ระบบ DLTV ใช้งานได้ ≥ 95%</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Second Row -->
+            <div class="grid grid-cols-1 lg:grid-cols-4 gap-6 relative" style="z-index: 2;">
+                <!-- Impact -->
+                <div id="impact" class="component-card bg-white rounded-xl p-6 border-l-4 border-indigo-500 shadow-lg" onclick="toggleCriteria('impact')">
+                    <div class="flex items-center mb-4 cursor-pointer">
+                        <div class="w-10 h-10 bg-indigo-100 rounded-lg flex items-center justify-center mr-3">
+                            <svg class="w-6 h-6 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+                            </svg>
+                        </div>
+                        <h3 class="text-xl font-bold text-indigo-700">Impact (ผลกระทบ)</h3>
+                        <svg class="w-5 h-5 ml-auto transform transition-transform" id="impactArrow">
+                            <path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" fill="none"/>
+                        </svg>
+                    </div>
+                    <div class="space-y-2 text-sm text-slate-700">
+                        <div class="flex items-center">
+                            <span class="w-2 h-2 bg-indigo-300 rounded-full mr-2"></span>
+                            <span>โรงเรียนขนาดเล็กได้รับประโยชน์</span>
+                        </div>
+                        <div class="flex items-center">
+                            <span class="w-2 h-2 bg-indigo-300 rounded-full mr-2"></span>
+                            <span>การศึกษาผ่านระบบทางไกล</span>
+                        </div>
+                    </div>
+                    <div id="impactCriteria" class="criteria-panel mt-4 p-3 bg-indigo-50 rounded-lg" style="display: none;">
+                        <p class="text-xs font-semibold text-indigo-800">เกณฑ์ประเมิน:</p>
+                        <p class="text-xs text-indigo-700">≥ 60% โรงเรียนสะท้อนคุณภาพดีขึ้น</p>
+                        <p class="text-xs text-indigo-700">ลดความเหลื่อมล้ำทางการศึกษา</p>
+                        <p class="text-xs text-indigo-700">เพิ่มโอกาสเข้าถึงการศึกษาคุณภาพ</p>
+                    </div>
+                </div>
+
+                <!-- Effectiveness -->
+                <div id="effectiveness" class="component-card bg-white rounded-xl p-6 border-l-4 border-purple-500 shadow-lg" onclick="toggleCriteria('effectiveness')">
+                    <div class="flex items-center mb-4 cursor-pointer">
+                        <div class="w-10 h-10 bg-purple-100 rounded-lg flex items-center justify-center mr-3">
+                            <svg class="w-6 h-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z"/>
+                            </svg>
+                        </div>
+                        <h3 class="text-xl font-bold text-purple-700">Effectiveness (ประสิทธิผล)</h3>
+                        <svg class="w-5 h-5 ml-auto transform transition-transform" id="effectivenessArrow">
+                            <path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" fill="none"/>
+                        </svg>
+                    </div>
+                    <div class="space-y-2 text-sm text-slate-700">
+                        <div class="flex items-center">
+                            <span class="w-2 h-2 bg-purple-300 rounded-full mr-2"></span>
+                            <span>ความสำเร็จของโครงการ</span>
+                        </div>
+                        <div class="flex items-center">
+                            <span class="w-2 h-2 bg-purple-300 rounded-full mr-2"></span>
+                            <span>การบรรลุวัตถุประสงค์</span>
+                        </div>
+                    </div>
+                    <div id="effectivenessCriteria" class="criteria-panel mt-4 p-3 bg-purple-50 rounded-lg" style="display: none;">
+                        <p class="text-xs font-semibold text-purple-800">เกณฑ์ประเมิน:</p>
+                        <p class="text-xs text-purple-700">≥ 75% บรรลุเป้าหมาย</p>
+                        <p class="text-xs text-purple-700">ความพึงพอใจผู้ใช้งาน ≥ 4.0/5.0</p>
+                        <p class="text-xs text-purple-700">การใช้งานระบบตามวัตถุประสงค์</p>
+                    </div>
+                </div>
+
+                <!-- Efficiency -->
+                <div id="efficiency" class="component-card bg-white rounded-xl p-6 border-l-4 border-teal-500 shadow-lg" onclick="toggleCriteria('efficiency')">
+                    <div class="flex items-center mb-4 cursor-pointer">
+                        <div class="w-10 h-10 bg-teal-100 rounded-lg flex items-center justify-center mr-3">
+                            <svg class="w-6 h-6 text-teal-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/>
+                            </svg>
+                        </div>
+                        <h3 class="text-xl font-bold text-teal-700">Efficiency (ประสิทธิภาพ)</h3>
+                        <svg class="w-5 h-5 ml-auto transform transition-transform" id="efficiencyArrow">
+                            <path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" fill="none"/>
+                        </svg>
+                    </div>
+                    <div class="space-y-2 text-sm text-slate-700">
+                        <div class="flex items-center">
+                            <span class="w-2 h-2 bg-teal-300 rounded-full mr-2"></span>
+                            <span>การใช้ทรัพยากรอย่างคุ้มค่า</span>
+                        </div>
+                        <div class="flex items-center">
+                            <span class="w-2 h-2 bg-teal-300 rounded-full mr-2"></span>
+                            <span>อัตราส่วนต้นทุนต่อผลลัพธ์</span>
+                        </div>
+                    </div>
+                    <div id="efficiencyCriteria" class="criteria-panel mt-4 p-3 bg-teal-50 rounded-lg" style="display: none;">
+                        <p class="text-xs font-semibold text-teal-800">เกณฑ์ประเมิน:</p>
+                        <p class="text-xs text-teal-700">ROI ≥ 1.5 เท่า</p>
+                        <p class="text-xs text-teal-700">ลดต้นทุนการดำเนินงาน ≥ 20%</p>
+                        <p class="text-xs text-teal-700">เวลาดำเนินการลดลง ≥ 30%</p>
+                    </div>
+                </div>
+
+                <!-- Sustainability -->
+                <div id="sustainability" class="component-card bg-white rounded-xl p-6 border-l-4 border-emerald-500 shadow-lg" onclick="toggleCriteria('sustainability')">
+                    <div class="flex items-center mb-4 cursor-pointer">
+                        <div class="w-10 h-10 bg-emerald-100 rounded-lg flex items-center justify-center mr-3">
+                            <svg class="w-6 h-6 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/>
+                            </svg>
+                        </div>
+                        <h3 class="text-xl font-bold text-emerald-700">Sustainability (ความยั่งยืน)</h3>
+                        <svg class="w-5 h-5 ml-auto transform transition-transform" id="sustainabilityArrow">
+                            <path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" fill="none"/>
+                        </svg>
+                    </div>
+                    <div class="space-y-2 text-sm text-slate-700">
+                        <div class="flex items-center">
+                            <span class="w-2 h-2 bg-emerald-300 rounded-full mr-2"></span>
+                            <span>ความต่อเนื่องของโครงการ</span>
+                        </div>
+                        <div class="flex items-center">
+                            <span class="w-2 h-2 bg-emerald-300 rounded-full mr-2"></span>
+                            <span>การพัฒนาอย่างยั่งยืน</span>
+                        </div>
+                    </div>
+                    <div id="sustainabilityCriteria" class="criteria-panel mt-4 p-3 bg-emerald-50 rounded-lg" style="display: none;">
+                        <p class="text-xs font-semibold text-emerald-800">เกณฑ์ประเมิน:</p>
+                        <p class="text-xs text-emerald-700">≥ 80% ดำเนินต่อเนื่อง 3 ปี</p>
+                        <p class="text-xs text-emerald-700">มีแผนการพัฒนาระยะยาว</p>
+                        <p class="text-xs text-emerald-700">การสนับสนุนจากผู้บริหารต่อเนื่อง</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Detail Panels -->
+        <div id="detailPanels" class="mt-8 space-y-4">
+            <!-- Context Detail -->
+            <div id="contextDetail" class="bg-white rounded-xl p-6 shadow-lg border-l-4 border-blue-500">
+                <h4 class="text-2xl font-bold text-blue-700 mb-4 text-center">Context (บริบท) - รายละเอียด</h4>
+                <div class="grid md:grid-cols-2 gap-6">
+                    <div>
+                        <h5 class="font-semibold text-slate-800 mb-3">ความสอดคล้องกับแผนการศึกษาแห่งชาติ</h5>
+                        <div class="bg-blue-50 p-4 rounded-lg">
+                            <div class="flex justify-between mb-2">
+                                <span class="text-sm">ความสอดคล้อง</span>
+                                <span class="text-sm font-semibold">85%</span>
+                            </div>
+                            <div class="w-full bg-blue-200 rounded-full h-2">
+                                <div class="bg-blue-600 h-2 rounded-full progress-bar" style="width: 85%"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <h5 class="font-semibold text-slate-800 mb-3">ความจำเป็นของโครงการ</h5>
+                        <div class="bg-blue-50 p-4 rounded-lg">
+                            <div class="flex justify-between mb-2">
+                                <span class="text-sm">การสะท้อนความจำเป็น</span>
+                                <span class="text-sm font-semibold">78%</span>
+                            </div>
+                            <div class="w-full bg-blue-200 rounded-full h-2">
+                                <div class="bg-blue-600 h-2 rounded-full progress-bar" style="width: 78%"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Add more detail panels for other components -->
+        </div>
+
+        <!-- Progress Indicator -->
+        <div class="mt-8 bg-white rounded-xl p-6 shadow-lg">
+            <h4 class="text-xl font-bold text-slate-800 mb-4">ความคืบหน้าโครงการ</h4>
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                <div class="text-center">
+                    <div class="text-2xl font-bold text-blue-600">85%</div>
+                    <div class="text-sm text-slate-600">Context</div>
+                </div>
+                <div class="text-center">
+                    <div class="text-2xl font-bold text-green-600">92%</div>
+                    <div class="text-sm text-slate-600">Input</div>
+                </div>
+                <div class="text-center">
+                    <div class="text-2xl font-bold text-amber-600">78%</div>
+                    <div class="text-sm text-slate-600">Process</div>
+                </div>
+                <div class="text-center">
+                    <div class="text-2xl font-bold text-pink-600">71%</div>
+                    <div class="text-sm text-slate-600">Product</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentStep = 0;
+        let animationInterval;
+        
+        function toggleCriteria(component) {
+            const criteriaPanel = document.getElementById(component + 'Criteria');
+            const arrow = document.getElementById(component + 'Arrow');
+            const card = document.getElementById(component);
+            
+            if (criteriaPanel) {
+                const isVisible = criteriaPanel.style.display !== 'none';
+                
+                // Hide all other criteria panels
+                document.querySelectorAll('.criteria-panel').forEach(panel => {
+                    if (panel.id !== component + 'Criteria') {
+                        panel.style.display = 'none';
+                    }
+                });
+                
+                // Reset all arrows
+                document.querySelectorAll('[id$="Arrow"]').forEach(arr => {
+                    if (arr.id !== component + 'Arrow') {
+                        arr.style.transform = 'rotate(0deg)';
+                    }
+                });
+                
+                // Remove active class from all cards
+                document.querySelectorAll('.component-card').forEach(c => {
+                    if (c.id !== component) {
+                        c.classList.remove('active');
+                    }
+                });
+                
+                // Toggle current panel
+                if (isVisible) {
+                    criteriaPanel.style.display = 'none';
+                    arrow.style.transform = 'rotate(0deg)';
+                    card.classList.remove('active');
+                } else {
+                    criteriaPanel.style.display = 'block';
+                    arrow.style.transform = 'rotate(180deg)';
+                    card.classList.add('active');
+                }
+            }
+        }
+        
+        function toggleDetail(component) {
+            const detailPanel = document.getElementById(component + 'Detail');
+            const card = document.getElementById(component);
+            
+            // Close all other panels
+            document.querySelectorAll('.detail-panel').forEach(panel => {
+                if (panel.id !== component + 'Detail') {
+                    panel.classList.remove('open');
+                }
+            });
+            
+            // Remove active class from all cards
+            document.querySelectorAll('.component-card').forEach(c => {
+                if (c.id !== component) {
+                    c.classList.remove('active');
+                }
+            });
+            
+            // Toggle current panel and card
+            if (detailPanel) {
+                detailPanel.classList.toggle('open');
+                card.classList.toggle('active');
+            }
+        }
+        
+        function showOverview() {
+            resetView();
+            document.querySelectorAll('.component-card').forEach(card => {
+                card.classList.add('pulse-animation');
+            });
+            
+            setTimeout(() => {
+                document.querySelectorAll('.component-card').forEach(card => {
+                    card.classList.remove('pulse-animation');
+                });
+            }, 3000);
+        }
+        
+        function startAnimation() {
+            resetView();
+            const steps = ['context', 'input', 'process', 'product', 'impact', 'effectiveness', 'efficiency', 'sustainability'];
+            const arrows = ['arrow1', 'arrow2', 'arrow3', 'arrow4', 'arrow5', 'arrow6', 'arrow7'];
+            
+            currentStep = 0;
+            
+            function animateStep() {
+                if (currentStep < steps.length) {
+                    // Remove previous highlights
+                    if (currentStep > 0) {
+                        const prevCard = document.getElementById(steps[currentStep - 1]);
+                        prevCard.classList.remove('active', 'pulse-animation');
+                        
+                        if (currentStep - 1 < arrows.length) {
+                            const prevArrow = document.getElementById(arrows[currentStep - 1]);
+                            prevArrow.classList.remove('highlight');
+                        }
+                    }
+                    
+                    // Highlight current step
+                    const currentCard = document.getElementById(steps[currentStep]);
+                    if (currentCard) {
+                        currentCard.classList.add('active', 'pulse-animation');
+                        
+                        // Scroll to current card
+                        currentCard.scrollIntoView({ 
+                            behavior: 'smooth', 
+                            block: 'center' 
+                        });
+                    }
+                    
+                    // Highlight arrow to next step
+                    if (currentStep < arrows.length) {
+                        const currentArrow = document.getElementById(arrows[currentStep]);
+                        if (currentArrow) {
+                            currentArrow.classList.add('highlight');
+                        }
+                    }
+                    
+                    currentStep++;
+                    
+                    // Schedule next step
+                    animationInterval = setTimeout(animateStep, 2000);
+                } else {
+                    // Animation complete - clean up last step
+                    if (steps.length > 0) {
+                        const lastCard = document.getElementById(steps[steps.length - 1]);
+                        if (lastCard) {
+                            setTimeout(() => {
+                                lastCard.classList.remove('pulse-animation');
+                            }, 1000);
+                        }
+                    }
+                    
+                    // Clean up last arrow
+                    if (arrows.length > 0) {
+                        const lastArrow = document.getElementById(arrows[arrows.length - 1]);
+                        if (lastArrow) {
+                            setTimeout(() => {
+                                lastArrow.classList.remove('highlight');
+                            }, 2000);
+                        }
+                    }
+                }
+            }
+            
+            // Start animation
+            animateStep();
+        }
+        
+        function resetView() {
+            // Clear any running animations
+            if (animationInterval) {
+                clearTimeout(animationInterval);
+                animationInterval = null;
+            }
+            currentStep = 0;
+            
+            // Reset all cards
+            document.querySelectorAll('.component-card').forEach(card => {
+                card.classList.remove('active', 'pulse-animation');
+            });
+            
+            // Reset all arrows
+            document.querySelectorAll('.arrow').forEach(arrow => {
+                arrow.classList.remove('highlight');
+            });
+            
+            // Close all detail panels
+            document.querySelectorAll('.detail-panel').forEach(panel => {
+                panel.classList.remove('open');
+            });
+            
+            // Hide all criteria panels
+            document.querySelectorAll('.criteria-panel').forEach(panel => {
+                panel.style.display = 'none';
+            });
+            
+            // Reset all dropdown arrows
+            document.querySelectorAll('[id$="Arrow"]').forEach(arrow => {
+                arrow.style.transform = 'rotate(0deg)';
+            });
+        }
+        
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('CIPPIEST Model Framework loaded successfully');
+        });
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9809727fb44b7325',t:'MTc1ODEyMDk1NS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
